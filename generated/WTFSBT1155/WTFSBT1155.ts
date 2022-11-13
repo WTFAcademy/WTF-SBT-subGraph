@@ -80,6 +80,28 @@ export class CreatedSoul__Params {
   }
 }
 
+export class Donate extends ethereum.Event {
+  get params(): Donate__Params {
+    return new Donate__Params(this);
+  }
+}
+
+export class Donate__Params {
+  _event: Donate;
+
+  constructor(event: Donate) {
+    this._event = event;
+  }
+
+  get donator(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+}
+
 export class MinterAdded extends ethereum.Event {
   get params(): MinterAdded__Params {
     return new MinterAdded__Params(this);
@@ -243,6 +265,28 @@ export class TransferSingle__Params {
 
   get value(): BigInt {
     return this._event.parameters[4].value.toBigInt();
+  }
+}
+
+export class TreasuryTransferred extends ethereum.Event {
+  get params(): TreasuryTransferred__Params {
+    return new TreasuryTransferred__Params(this);
+  }
+}
+
+export class TreasuryTransferred__Params {
+  _event: TreasuryTransferred;
+
+  constructor(event: TreasuryTransferred) {
+    this._event = event;
+  }
+
+  get user(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get newTreasury(): Address {
+    return this._event.parameters[1].value.toAddress();
   }
 }
 
@@ -838,6 +882,21 @@ export class WTFSBT1155 extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  treasury(): Address {
+    let result = super.call("treasury", "treasury():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_treasury(): ethereum.CallResult<Address> {
+    let result = super.tryCall("treasury", "treasury():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   uri(soulId: BigInt): string {
     let result = super.call("uri", "uri(uint256):(string)", [
       ethereum.Value.fromUnsignedBigInt(soulId)
@@ -885,6 +944,10 @@ export class ConstructorCall__Inputs {
 
   get baseURI_(): string {
     return this._call.inputValues[2].value.toString();
+  }
+
+  get treasury_(): Address {
+    return this._call.inputValues[3].value.toAddress();
   }
 }
 
@@ -964,6 +1027,32 @@ export class CreateSoulCall__Outputs {
   _call: CreateSoulCall;
 
   constructor(call: CreateSoulCall) {
+    this._call = call;
+  }
+}
+
+export class DonateCall extends ethereum.Call {
+  get inputs(): DonateCall__Inputs {
+    return new DonateCall__Inputs(this);
+  }
+
+  get outputs(): DonateCall__Outputs {
+    return new DonateCall__Outputs(this);
+  }
+}
+
+export class DonateCall__Inputs {
+  _call: DonateCall;
+
+  constructor(call: DonateCall) {
+    this._call = call;
+  }
+}
+
+export class DonateCall__Outputs {
+  _call: DonateCall;
+
+  constructor(call: DonateCall) {
     this._call = call;
   }
 }
@@ -1274,6 +1363,36 @@ export class TransferOwnershipCall__Outputs {
   _call: TransferOwnershipCall;
 
   constructor(call: TransferOwnershipCall) {
+    this._call = call;
+  }
+}
+
+export class TransferTreasuryCall extends ethereum.Call {
+  get inputs(): TransferTreasuryCall__Inputs {
+    return new TransferTreasuryCall__Inputs(this);
+  }
+
+  get outputs(): TransferTreasuryCall__Outputs {
+    return new TransferTreasuryCall__Outputs(this);
+  }
+}
+
+export class TransferTreasuryCall__Inputs {
+  _call: TransferTreasuryCall;
+
+  constructor(call: TransferTreasuryCall) {
+    this._call = call;
+  }
+
+  get treasury_(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class TransferTreasuryCall__Outputs {
+  _call: TransferTreasuryCall;
+
+  constructor(call: TransferTreasuryCall) {
     this._call = call;
   }
 }

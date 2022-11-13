@@ -1,10 +1,11 @@
 import {
   TransferSingle as TransferEvent,
+  Donate as DonateEvent,
   WTFSBT1155 as WTFSBT1155Contract
 } from "../generated/WTFSBT1155/WTFSBT1155"
 
 import {
-  Token, User
+  Token, User, Donator
 } from '../generated/schema'
 
 export function handleTransferSingle(event: TransferEvent): void {
@@ -24,6 +25,18 @@ export function handleTransferSingle(event: TransferEvent): void {
   let user = User.load(event.params.to.toHexString())
   if (!user) {
     user = new User(event.params.to.toHexString())
-    user.save()
+    user.id = event.params.to.toHexString()
   }
+  user.save()
+
+}
+
+export function handleDonate(event: DonateEvent): void {
+  let donator = Donator.load(event.params.donator.toHexString())
+  if (!donator) {
+    donator = new Donator(event.params.donator.toHexString())
+    donator.id = event.params.donator.toHexString()
+    donator.amount = event.params.amount
+  }
+  donator.save()
 }

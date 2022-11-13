@@ -11,3 +11,8 @@ type  User @entity {
   tokens: [Token!]!@derivedFrom(field: "owner")
   created: [Token!]!@derivedFrom(field: "creator")
 }
+
+type Donator @entity {
+  id: ID!
+  amount: BigInt!
+}

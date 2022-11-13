@@ -6,7 +6,7 @@ dataSources:
     name: WTFSBT1155
     network: goerli
     source:
-      address: "0xbB83fE24908f71C299fF0f0391A16Ab8F5bE0Cf1"
+      address: "0xDF9C19ceAdf7e4A9db07A57Fc0bFA246938e3BCA"
       abi: WTFSBT1155
       startBlock: 7800000
     mapping:
@@ -15,11 +15,14 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Token
-        - User  
+        - User 
+        - Donator
       abis:
         - name: WTFSBT1155
           file: ./abis/WTFSBT1155.json
       eventHandlers:
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
+        - event: Donate(indexed address,uint256)
+          handler: handleDonate
       file: ./src/wtfsbt-1155.ts

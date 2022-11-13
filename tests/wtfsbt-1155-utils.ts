@@ -4,6 +4,7 @@ import {
   ApprovalForAll,
   Bound,
   CreatedSoul,
+  Donate,
   MinterAdded,
   MinterRemoved,
   OwnershipTransferred,
@@ -11,6 +12,7 @@ import {
   Recover,
   TransferBatch,
   TransferSingle,
+  TreasuryTransferred,
   URI,
   Unbound,
   Unpaused
@@ -73,6 +75,21 @@ export function createCreatedSoulEvent(
   )
 
   return createdSoulEvent
+}
+
+export function createDonateEvent(donator: Address, amount: BigInt): Donate {
+  let donateEvent = changetype<Donate>(newMockEvent())
+
+  donateEvent.parameters = new Array()
+
+  donateEvent.parameters.push(
+    new ethereum.EventParam("donator", ethereum.Value.fromAddress(donator))
+  )
+  donateEvent.parameters.push(
+    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
+  )
+
+  return donateEvent
 }
 
 export function createMinterAddedEvent(newMinter: Address): MinterAdded {
@@ -213,6 +230,27 @@ export function createTransferSingleEvent(
   )
 
   return transferSingleEvent
+}
+
+export function createTreasuryTransferredEvent(
+  user: Address,
+  newTreasury: Address
+): TreasuryTransferred {
+  let treasuryTransferredEvent = changetype<TreasuryTransferred>(newMockEvent())
+
+  treasuryTransferredEvent.parameters = new Array()
+
+  treasuryTransferredEvent.parameters.push(
+    new ethereum.EventParam("user", ethereum.Value.fromAddress(user))
+  )
+  treasuryTransferredEvent.parameters.push(
+    new ethereum.EventParam(
+      "newTreasury",
+      ethereum.Value.fromAddress(newTreasury)
+    )
+  )
+
+  return treasuryTransferredEvent
 }
 
 export function createURIEvent(value: string, id: BigInt): URI {
