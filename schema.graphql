@@ -1,18 +1,11 @@
 type  Token @entity {
   id: ID!
-  contentURI: String!
   createdAtTimestamp: BigInt!
   creator: User!
-  owner: User!
 }
 
 type  User @entity {
   id: ID!
-  tokens: [Token!]!@derivedFrom(field: "owner")
   created: [Token!]!@derivedFrom(field: "creator")
-}
-
-type Donator @entity {
-  id: ID!
   amount: BigInt!
 }

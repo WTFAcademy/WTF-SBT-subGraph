@@ -1,13 +1,13 @@
 {
-  "name": "WTFSBT1155",
+  "name": "WTFSBT1155Minter",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ WTFSBT1155",
-    "create-local": "graph create --node http://localhost:8020/ WTFSBT1155",
-    "remove-local": "graph remove --node http://localhost:8020/ WTFSBT1155",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 WTFSBT1155",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ WTFSBT1155Minter",
+    "create-local": "graph create --node http://localhost:8020/ WTFSBT1155Minter",
+    "remove-local": "graph remove --node http://localhost:8020/ WTFSBT1155Minter",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 WTFSBT1155Minter",
     "test": "graph test"
   },
   "dependencies": {

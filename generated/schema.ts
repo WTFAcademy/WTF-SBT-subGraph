@@ -42,15 +42,6 @@ export class Token extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get contentURI(): string {
-    let value = this.get("contentURI");
-    return value!.toString();
-  }
-
-  set contentURI(value: string) {
-    this.set("contentURI", Value.fromString(value));
-  }
-
   get createdAtTimestamp(): BigInt {
     let value = this.get("createdAtTimestamp");
     return value!.toBigInt();
@@ -67,15 +58,6 @@ export class Token extends Entity {
 
   set creator(value: string) {
     this.set("creator", Value.fromString(value));
-  }
-
-  get owner(): string {
-    let value = this.get("owner");
-    return value!.toString();
-  }
-
-  set owner(value: string) {
-    this.set("owner", Value.fromString(value));
   }
 }
 
@@ -110,15 +92,6 @@ export class User extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get tokens(): Array<string> {
-    let value = this.get("tokens");
-    return value!.toStringArray();
-  }
-
-  set tokens(value: Array<string>) {
-    this.set("tokens", Value.fromStringArray(value));
-  }
-
   get created(): Array<string> {
     let value = this.get("created");
     return value!.toStringArray();
@@ -126,38 +99,6 @@ export class User extends Entity {
 
   set created(value: Array<string>) {
     this.set("created", Value.fromStringArray(value));
-  }
-}
-
-export class Donator extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save Donator entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        `Entities of type Donator must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
-      );
-      store.set("Donator", id.toString(), this);
-    }
-  }
-
-  static load(id: string): Donator | null {
-    return changetype<Donator | null>(store.get("Donator", id));
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value!.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
   }
 
   get amount(): BigInt {

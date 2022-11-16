@@ -3,11 +3,11 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: WTFSBT1155
+    name: WTFSBT1155Minter
     network: goerli
     source:
-      address: "0xDF9C19ceAdf7e4A9db07A57Fc0bFA246938e3BCA"
-      abi: WTFSBT1155
+      address: "0xfd8A6971aCCB1C05a76274C846E5C9fD0c8b82cb"
+      abi: WTFSBT1155Minter
       startBlock: 7800000
     mapping:
       kind: ethereum/events
@@ -16,13 +16,10 @@ dataSources:
       entities:
         - Token
         - User 
-        - Donator
       abis:
-        - name: WTFSBT1155
-          file: ./abis/WTFSBT1155.json
+        - name: WTFSBT1155Minter
+          file: ./abis/WTFSBT1155Minter.json
       eventHandlers:
-        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
-          handler: handleTransferSingle
-        - event: Donate(indexed address,uint256)
-          handler: handleDonate
-      file: ./src/wtfsbt-1155.ts
+        - event: SBTMinted(indexed address,indexed uint256)
+          handler: handleSBTMinted
+      file: ./src/wtfsbt-1155-minter.ts

@@ -1,7 +1,7 @@
 {
   "goerli": {
-    "WTFSBT1155": {
-      "address": "0xDF9C19ceAdf7e4A9db07A57Fc0bFA246938e3BCA"
+    "WTFSBT1155Minter": {
+      "address": "0xfd8A6971aCCB1C05a76274C846E5C9fD0c8b82cb"
     }
   }
 }
