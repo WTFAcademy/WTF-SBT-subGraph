@@ -7,7 +7,7 @@ import {
   Entity,
   Bytes,
   Address,
-  BigInt
+  BigInt,
 } from "@graphprotocol/graph-ts";
 
 export class OwnershipTransferred extends ethereum.Event {
@@ -45,12 +45,16 @@ export class SBTMinted__Params {
     this._event = event;
   }
 
-  get account(): Address {
+  get to(): Address {
     return this._event.parameters[0].value.toAddress();
   }
 
   get soulId(): BigInt {
     return this._event.parameters[1].value.toBigInt();
+  }
+
+  get donation(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
   }
 }
 
@@ -76,73 +80,47 @@ export class SignerChanged__Params {
   }
 }
 
-export class WTFSBT1155Minter extends ethereum.SmartContract {
-  static bind(address: Address): WTFSBT1155Minter {
-    return new WTFSBT1155Minter("WTFSBT1155Minter", address);
+export class test extends ethereum.SmartContract {
+  static bind(address: Address): test {
+    return new test("test", address);
   }
 
-  getMessageHash(account: Address, soulId: BigInt): Bytes {
-    let result = super.call(
-      "getMessageHash",
-      "getMessageHash(address,uint256):(bytes32)",
-      [
-        ethereum.Value.fromAddress(account),
-        ethereum.Value.fromUnsignedBigInt(soulId)
-      ]
-    );
+  _cachedChainId(): BigInt {
+    let result = super.call("_cachedChainId", "_cachedChainId():(uint256)", []);
 
-    return result[0].toBytes();
+    return result[0].toBigInt();
   }
 
-  try_getMessageHash(
-    account: Address,
-    soulId: BigInt
-  ): ethereum.CallResult<Bytes> {
+  try__cachedChainId(): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "getMessageHash",
-      "getMessageHash(address,uint256):(bytes32)",
-      [
-        ethereum.Value.fromAddress(account),
-        ethereum.Value.fromUnsignedBigInt(soulId)
-      ]
+      "_cachedChainId",
+      "_cachedChainId():(uint256)",
+      [],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  mintedAddress(param0: BigInt, param1: Address): boolean {
-    let result = super.call(
-      "mintedAddress",
-      "mintedAddress(uint256,address):(bool)",
-      [
-        ethereum.Value.fromUnsignedBigInt(param0),
-        ethereum.Value.fromAddress(param1)
-      ]
-    );
+  nonces(owner: Address): BigInt {
+    let result = super.call("nonces", "nonces(address):(uint256)", [
+      ethereum.Value.fromAddress(owner),
+    ]);
 
-    return result[0].toBoolean();
+    return result[0].toBigInt();
   }
 
-  try_mintedAddress(
-    param0: BigInt,
-    param1: Address
-  ): ethereum.CallResult<boolean> {
-    let result = super.tryCall(
-      "mintedAddress",
-      "mintedAddress(uint256,address):(bool)",
-      [
-        ethereum.Value.fromUnsignedBigInt(param0),
-        ethereum.Value.fromAddress(param1)
-      ]
-    );
+  try_nonces(owner: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("nonces", "nonces(address):(uint256)", [
+      ethereum.Value.fromAddress(owner),
+    ]);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   owner(): Address {
@@ -175,23 +153,54 @@ export class WTFSBT1155Minter extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  verify(ethSignedMessageHash: Bytes, signature: Bytes): boolean {
-    let result = super.call("verify", "verify(bytes32,bytes):(bool)", [
-      ethereum.Value.fromFixedBytes(ethSignedMessageHash),
-      ethereum.Value.fromBytes(signature)
-    ]);
+  verifySignature(
+    to: Address,
+    soulId: BigInt,
+    mintPrice: BigInt,
+    deadline: BigInt,
+    chainId: BigInt,
+    nonces: BigInt,
+    signature: Bytes,
+  ): boolean {
+    let result = super.call(
+      "verifySignature",
+      "verifySignature(address,uint256,uint256,uint256,uint256,uint256,bytes):(bool)",
+      [
+        ethereum.Value.fromAddress(to),
+        ethereum.Value.fromUnsignedBigInt(soulId),
+        ethereum.Value.fromUnsignedBigInt(mintPrice),
+        ethereum.Value.fromUnsignedBigInt(deadline),
+        ethereum.Value.fromUnsignedBigInt(chainId),
+        ethereum.Value.fromUnsignedBigInt(nonces),
+        ethereum.Value.fromBytes(signature),
+      ],
+    );
 
     return result[0].toBoolean();
   }
 
-  try_verify(
-    ethSignedMessageHash: Bytes,
-    signature: Bytes
+  try_verifySignature(
+    to: Address,
+    soulId: BigInt,
+    mintPrice: BigInt,
+    deadline: BigInt,
+    chainId: BigInt,
+    nonces: BigInt,
+    signature: Bytes,
   ): ethereum.CallResult<boolean> {
-    let result = super.tryCall("verify", "verify(bytes32,bytes):(bool)", [
-      ethereum.Value.fromFixedBytes(ethSignedMessageHash),
-      ethereum.Value.fromBytes(signature)
-    ]);
+    let result = super.tryCall(
+      "verifySignature",
+      "verifySignature(address,uint256,uint256,uint256,uint256,uint256,bytes):(bool)",
+      [
+        ethereum.Value.fromAddress(to),
+        ethereum.Value.fromUnsignedBigInt(soulId),
+        ethereum.Value.fromUnsignedBigInt(mintPrice),
+        ethereum.Value.fromUnsignedBigInt(deadline),
+        ethereum.Value.fromUnsignedBigInt(chainId),
+        ethereum.Value.fromUnsignedBigInt(nonces),
+        ethereum.Value.fromBytes(signature),
+      ],
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -266,7 +275,7 @@ export class MintCall__Inputs {
     this._call = call;
   }
 
-  get account(): Address {
+  get to(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
@@ -274,8 +283,16 @@ export class MintCall__Inputs {
     return this._call.inputValues[1].value.toBigInt();
   }
 
+  get mintPrice(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+
+  get deadline(): BigInt {
+    return this._call.inputValues[3].value.toBigInt();
+  }
+
   get signature(): Bytes {
-    return this._call.inputValues[2].value.toBytes();
+    return this._call.inputValues[4].value.toBytes();
   }
 }
 
@@ -283,6 +300,40 @@ export class MintCall__Outputs {
   _call: MintCall;
 
   constructor(call: MintCall) {
+    this._call = call;
+  }
+}
+
+export class RecoverCall extends ethereum.Call {
+  get inputs(): RecoverCall__Inputs {
+    return new RecoverCall__Inputs(this);
+  }
+
+  get outputs(): RecoverCall__Outputs {
+    return new RecoverCall__Outputs(this);
+  }
+}
+
+export class RecoverCall__Inputs {
+  _call: RecoverCall;
+
+  constructor(call: RecoverCall) {
+    this._call = call;
+  }
+
+  get oldOwner(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get newOwner(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+}
+
+export class RecoverCall__Outputs {
+  _call: RecoverCall;
+
+  constructor(call: RecoverCall) {
     this._call = call;
   }
 }
@@ -369,6 +420,32 @@ export class TransferOwnershipCall__Outputs {
   _call: TransferOwnershipCall;
 
   constructor(call: TransferOwnershipCall) {
+    this._call = call;
+  }
+}
+
+export class WithdrawCall extends ethereum.Call {
+  get inputs(): WithdrawCall__Inputs {
+    return new WithdrawCall__Inputs(this);
+  }
+
+  get outputs(): WithdrawCall__Outputs {
+    return new WithdrawCall__Outputs(this);
+  }
+}
+
+export class WithdrawCall__Inputs {
+  _call: WithdrawCall;
+
+  constructor(call: WithdrawCall) {
+    this._call = call;
+  }
+}
+
+export class WithdrawCall__Outputs {
+  _call: WithdrawCall;
+
+  constructor(call: WithdrawCall) {
     this._call = call;
   }
 }

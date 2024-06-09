@@ -1,25 +1,27 @@
-specVersion: 0.0.4
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
 schema:
   file: schema.graphql
 dataSources:
   - kind: ethereum
-    name: WTFSBT1155Minter
-    network: goerli
+    name: test
+    network: sepolia
     source:
-      address: "0xfd8A6971aCCB1C05a76274C846E5C9fD0c8b82cb"
-      abi: WTFSBT1155Minter
-      startBlock: 7800000
+      address: "0x503cF70910Cc87584d6052A5B9a1b2ebBE441627"
+      abi: test
+      startBlock: 6073116
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Token
         - User
       abis:
-        - name: WTFSBT1155Minter
-          file: WTFSBT1155Minter\abis\WTFSBT1155Minter.json
+        - name: test
+          file: test/abis/test.json
       eventHandlers:
-        - event: SBTMinted(indexed address,indexed uint256)
+        - event: SBTMinted(indexed address,indexed uint256,uint256)
           handler: handleSBTMinted
-      file: WTFSBT1155Minter\WTFSBT1155Minter.wasm
+      file: test/test.wasm

@@ -1,18 +1,18 @@
 {
-  "name": "WTFSBT1155Minter",
+  "name": "test_base-sbt",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ WTFSBT1155Minter",
-    "create-local": "graph create --node http://localhost:8020/ WTFSBT1155Minter",
-    "remove-local": "graph remove --node http://localhost:8020/ WTFSBT1155Minter",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 WTFSBT1155Minter",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ test_base-sbt",
+    "create-local": "graph create --node http://localhost:8020/ test_base-sbt",
+    "remove-local": "graph remove --node http://localhost:8020/ test_base-sbt",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 test_base-sbt",
     "test": "graph test"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.35.0",
-    "@graphprotocol/graph-ts": "0.28.1"
+    "@graphprotocol/graph-cli": "0.72.2",
+    "@graphprotocol/graph-ts": "0.32.0"
   },
   "devDependencies": { "matchstick-as": "0.5.0" }
 }
