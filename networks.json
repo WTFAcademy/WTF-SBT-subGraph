@@ -1,7 +1,8 @@
 {
-  "goerli": {
-    "WTFSBT1155Minter": {
-      "address": "0xfd8A6971aCCB1C05a76274C846E5C9fD0c8b82cb"
+  "sepolia": {
+    "test": {
+      "address": "0x503cF70910Cc87584d6052A5B9a1b2ebBE441627",
+      "startBlock": 0
     }
   }
 }

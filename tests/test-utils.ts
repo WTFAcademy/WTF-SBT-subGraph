@@ -4,7 +4,7 @@ import {
   OwnershipTransferred,
   SBTMinted,
   SignerChanged
-} from "../generated/WTFSBT1155Minter/WTFSBT1155Minter"
+} from "../generated/test/test"
 
 export function createOwnershipTransferredEvent(
   previousOwner: Address,
@@ -30,18 +30,25 @@ export function createOwnershipTransferredEvent(
 }
 
 export function createSBTMintedEvent(
-  account: Address,
-  soulId: BigInt
+  to: Address,
+  soulId: BigInt,
+  donation: BigInt
 ): SBTMinted {
   let sbtMintedEvent = changetype<SBTMinted>(newMockEvent())
 
   sbtMintedEvent.parameters = new Array()
 
   sbtMintedEvent.parameters.push(
-    new ethereum.EventParam("account", ethereum.Value.fromAddress(account))
+    new ethereum.EventParam("to", ethereum.Value.fromAddress(to))
   )
   sbtMintedEvent.parameters.push(
     new ethereum.EventParam("soulId", ethereum.Value.fromUnsignedBigInt(soulId))
+  )
+  sbtMintedEvent.parameters.push(
+    new ethereum.EventParam(
+      "donation",
+      ethereum.Value.fromUnsignedBigInt(donation)
+    )
   )
 
   return sbtMintedEvent
