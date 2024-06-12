@@ -5,12 +5,12 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: test
-    network: sepolia
+    name: base-sbt
+    network: base
     source:
-      address: "0x503cF70910Cc87584d6052A5B9a1b2ebBE441627"
-      abi: test
-      startBlock: 6073116
+      address: "0x07A7267126951ECcBE0b2319053c4218c49eCd23"
+      abi: base-sbt
+      startBlock: 15694993
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -19,9 +19,9 @@ dataSources:
         - Token
         - User 
       abis:
-        - name: test
-          file: ./abis/test.json
+        - name: base-sbt
+          file: ./abis/base-sbt.json
       eventHandlers:
         - event: SBTMinted(indexed address,indexed uint256,uint256)
           handler: handleSBTMinted
-      file: ./src/test.ts
+      file: ./src/base-sbt.ts

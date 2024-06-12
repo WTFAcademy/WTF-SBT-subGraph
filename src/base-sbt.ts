@@ -1,7 +1,7 @@
 import {
   SBTMinted as TransferEvent,
-  test as WTFSBT1155MinterContract
-} from "../generated/test/test"
+  base_sbt as WTFSBT1155MinterContract
+} from "../generated/base-sbt/base_sbt"
 import {
   Token, User
 } from "../generated/schema"
