@@ -1,11 +1,14 @@
 type  Token @entity {
   id: ID!
+  soulId: BigInt!
   createdAtTimestamp: BigInt!
   creator: User!
+  owner: User!
 }
 
 type  User @entity {
   id: ID!
+  tokens: [Token!]!@derivedFrom(field: "owner")
   created: [Token!]!@derivedFrom(field: "creator")
   amount: BigInt!
 }

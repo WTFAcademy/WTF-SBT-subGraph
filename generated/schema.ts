@@ -50,6 +50,19 @@ export class Token extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get soulId(): BigInt {
+    let value = this.get("soulId");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set soulId(value: BigInt) {
+    this.set("soulId", Value.fromBigInt(value));
+  }
+
   get createdAtTimestamp(): BigInt {
     let value = this.get("createdAtTimestamp");
     if (!value || value.kind == ValueKind.NULL) {
@@ -74,6 +87,19 @@ export class Token extends Entity {
 
   set creator(value: string) {
     this.set("creator", Value.fromString(value));
+  }
+
+  get owner(): string {
+    let value = this.get("owner");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set owner(value: string) {
+    this.set("owner", Value.fromString(value));
   }
 }
 
@@ -114,6 +140,10 @@ export class User extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
+  }
+
+  get tokens(): TokenLoader {
+    return new TokenLoader("User", this.get("id")!.toString(), "tokens");
   }
 
   get created(): TokenLoader {

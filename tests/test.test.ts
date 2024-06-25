@@ -4,57 +4,47 @@ import {
   test,
   clearStore,
   beforeAll,
-  afterAll
+  afterAll,
+  newMockEvent
 } from "matchstick-as/assembly/index"
-import { Address, BigInt } from "@graphprotocol/graph-ts"
-import { OwnershipTransferred } from "../generated/schema"
-import { OwnershipTransferred as OwnershipTransferredEvent } from "../generated/test/test"
-import { handleOwnershipTransferred } from "../src/test"
-import { createOwnershipTransferredEvent } from "./test-utils"
+import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts"
+import { handleSBTMinted } from "../src/base-sbt"
 
-// Tests structure (matchstick-as >=0.5.0)
-// https://thegraph.com/docs/en/developer/matchstick/#tests-structure-0-5-0
 
-describe("Describe entity assertions", () => {
+describe("SBTMinted entity assertions", () => {
   beforeAll(() => {
-    let previousOwner = Address.fromString(
-      "0x0000000000000000000000000000000000000001"
-    )
-    let newOwner = Address.fromString(
-      "0x0000000000000000000000000000000000000001"
-    )
-    let newOwnershipTransferredEvent = createOwnershipTransferredEvent(
-      previousOwner,
-      newOwner
-    )
-    handleOwnershipTransferred(newOwnershipTransferredEvent)
+    let to = Address.fromString("0x0000000000000000000000000000000000000002")
+    let soulId = BigInt.fromString("1")
+    let donation = BigInt.fromString("1000")
   })
 
   afterAll(() => {
     clearStore()
   })
 
-  // For more test scenarios, see:
-  // https://thegraph.com/docs/en/developer/matchstick/#write-a-unit-test
+  test("SBTMinted created and stored correctly", () => {
+    console.log("Running test");
+    
+    assert.entityCount("SBTMinted", 1)
 
-  test("OwnershipTransferred created and stored", () => {
-    assert.entityCount("OwnershipTransferred", 1)
-
-    // 0xa16081f360e3847006db660bae1c6d1b2e17ec2a is the default address used in newMockEvent() function
     assert.fieldEquals(
-      "OwnershipTransferred",
-      "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
-      "previousOwner",
-      "0x0000000000000000000000000000000000000001"
+      "SBTMinted",
+      "0x0000000000000000000000000000000000000002-1", // Corrected ID format to match the expected format in entity storage
+      "to",
+      "0x0000000000000000000000000000000000000002"
     )
     assert.fieldEquals(
-      "OwnershipTransferred",
-      "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
-      "newOwner",
-      "0x0000000000000000000000000000000000000001"
+      "SBTMinted",
+      "0x0000000000000000000000000000000000000002-1", // Corrected ID format
+      "soulId",
+      "1"
     )
-
-    // More assert options:
-    // https://thegraph.com/docs/en/developer/matchstick/#asserts
+    assert.fieldEquals(
+      "SBTMinted",
+      "0x0000000000000000000000000000000000000002-1", // Corrected ID format
+      "donation",
+      "1000"
+    )
   })
 })
+
